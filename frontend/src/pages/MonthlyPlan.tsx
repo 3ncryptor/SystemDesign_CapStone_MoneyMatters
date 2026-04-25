@@ -36,6 +36,17 @@ const MonthlyPlan: React.FC = () => {
     const handleSetGoal = async (e: React.FormEvent) => {
         e.preventDefault();
         const now = new Date();
+
+        if (currentMonthPlan) {
+            setMessage({
+                type: 'error',
+                text: currentMonthPlan.isClosed
+                    ? 'Current month is already closed. You cannot set another goal for this month.'
+                    : 'Monthly plan already exists for this month.',
+            });
+            return;
+        }
+
         try {
             await api.post('/monthly-plan', {
                 month: now.getMonth() + 1,
@@ -61,7 +72,10 @@ const MonthlyPlan: React.FC = () => {
         }
     };
 
-    const currentMonthPlan = plans.find(p => !p.isClosed);
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1;
+    const currentYear = now.getFullYear();
+    const currentMonthPlan = plans.find(p => p.month === currentMonth && p.year === currentYear);
     const pastPlans = plans.filter(p => p.isClosed).sort((a, b) => (b.year * 12 + b.month) - (a.year * 12 + a.month));
 
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -126,20 +140,28 @@ const MonthlyPlan: React.FC = () => {
                                 </div>
                                 <div className="card" style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1rem' }}>
                                     <p className="text-muted text-sm">Status</p>
-                                    <p className="font-bold text-2xl text-primary">Active</p>
+                                    <p className={`font-bold text-2xl ${currentMonthPlan.isClosed ? 'text-income' : 'text-primary'}`}>
+                                        {currentMonthPlan.isClosed ? 'Closed' : 'Active'}
+                                    </p>
                                 </div>
                             </div>
 
-                            <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
-                                <h4 className="font-bold" style={{ marginBottom: '1rem' }}>Danger Zone</h4>
-                                <p className="text-muted text-sm" style={{ marginBottom: '1.25rem' }}>
-                                    Closing the month will lock all transactions and calculate your final savings against your goal.
+                            {!currentMonthPlan.isClosed ? (
+                                <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
+                                    <h4 className="font-bold" style={{ marginBottom: '1rem' }}>Danger Zone</h4>
+                                    <p className="text-muted text-sm" style={{ marginBottom: '1.25rem' }}>
+                                        Closing the month will lock all transactions and calculate your final savings against your goal.
+                                    </p>
+                                    <button onClick={handleCloseMonth} className="btn btn-secondary" style={{ width: '100%', color: 'var(--destructive)', borderColor: 'rgba(239, 68, 68, 0.2)' }}>
+                                        <Lock size={18} />
+                                        <span>Close Month & Calculate Savings</span>
+                                    </button>
+                                </div>
+                            ) : (
+                                <p className="text-muted text-sm" style={{ borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
+                                    This month's plan is already closed. You can review the result in Performance History.
                                 </p>
-                                <button onClick={handleCloseMonth} className="btn btn-secondary" style={{ width: '100%', color: 'var(--destructive)', borderColor: 'rgba(239, 68, 68, 0.2)' }}>
-                                    <Lock size={18} />
-                                    <span>Close Month & Calculate Savings</span>
-                                </button>
-                            </div>
+                            )}
                         </div>
                     )}
                 </div>
