@@ -20,4 +20,8 @@ export class MonthlyPlanRepository {
   async getClosedPlans(userId: string): Promise<IMonthlyPlan[]> {
     return MonthlyPlan.find({ userId, isClosed: true });
   }
+
+  async findAllByUser(userId: string): Promise<IMonthlyPlan[]> {
+    return MonthlyPlan.find({ userId });
+  }
 }

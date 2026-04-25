@@ -11,7 +11,19 @@ export class DashboardController {
     const userId = req.user!.userId;
     const { month, year } = req.query;
 
-    const data = await service.getDashboard(userId, Number(month), Number(year));
+    const now = new Date();
+    const parsedMonth = Number(month);
+    const parsedYear = Number(year);
+
+    const dashboardMonth = Number.isInteger(parsedMonth) && parsedMonth >= 1 && parsedMonth <= 12
+      ? parsedMonth
+      : now.getMonth() + 1;
+
+    const dashboardYear = Number.isInteger(parsedYear) && parsedYear > 0
+      ? parsedYear
+      : now.getFullYear();
+
+    const data = await service.getDashboard(userId, dashboardMonth, dashboardYear);
 
     res.json(new ApiResponse(200, data, "Dashboard data fetched"));
   });

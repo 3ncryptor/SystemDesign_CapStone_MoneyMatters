@@ -7,6 +7,7 @@ const router = express.Router();
 router.use(authMiddleware);
 
 router.post("/", MonthlyController.setGoal);
+router.get("/", MonthlyController.getPlans);
 router.post("/close", MonthlyController.closeMonth);
 
 export default router;

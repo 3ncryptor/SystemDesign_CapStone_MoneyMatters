@@ -3,6 +3,9 @@ import { Types } from "mongoose";
 
 export class TransactionRepository {
   async create(data: Partial<ITransaction>): Promise<ITransaction> {
+    if (data.userId && typeof data.userId === "string") {
+      data.userId = new Types.ObjectId(data.userId) as any;
+    }
     return Transaction.create(data);
   }
 
