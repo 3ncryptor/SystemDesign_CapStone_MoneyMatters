@@ -1,0 +1,37 @@
+{
+  "name": "moneymatters-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MoneyMatters — backend and (future) frontend.",
+  "scripts": {
+    "dev": "npm run dev --prefix backend",
+    "dev:backend": "npm run dev --prefix backend",
+    "build": "npm run build --prefix backend",
+    "build:backend": "npm run build --prefix backend",
+    "start": "npm run start --prefix backend",
+    "test": "npm run test --prefix backend",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "npm run format --prefix backend",
+    "format:check": "npm run format:check --prefix backend",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.1",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.3",
+    "typescript-eslint": "^8.59.0"
+  },
+  "lint-staged": {
+    "backend/**/*.{ts,js,cjs,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "backend/**/*.{json,md,yml,yaml}": "prettier --write"
+  }
+}

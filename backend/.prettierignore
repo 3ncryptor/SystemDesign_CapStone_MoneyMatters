@@ -1,0 +1,16 @@
+node_modules
+dist
+coverage
+*.log
+
+# Env files
+.env
+.env.*
+
+# Lockfiles
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build artifacts
+*.tsbuildinfo

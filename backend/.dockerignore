@@ -1,0 +1,32 @@
+node_modules
+dist
+coverage
+
+# Logs
+*.log
+npm-debug.log*
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Tests / dev tooling
+tests
+**/*.test.ts
+**/*.spec.ts
+jest.config.cjs
+
+# VCS / editors
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
+
+# Docker
+Dockerfile
+.dockerignore
+
+# TS build cache
+*.tsbuildinfo
