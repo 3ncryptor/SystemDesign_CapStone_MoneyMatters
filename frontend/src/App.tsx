@@ -2,8 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import AppLayout from './components/AppLayout';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
+import AuthSwitch from './components/ui/demo';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import MonthlyPlan from './pages/MonthlyPlan';
@@ -13,8 +12,8 @@ function App() {
     <Router>
       <AuthProvider>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<AuthSwitch />} />
+          <Route path="/register" element={<AuthSwitch />} />
 
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
