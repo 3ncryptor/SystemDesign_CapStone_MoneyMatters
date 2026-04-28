@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Wallet, LogIn, Mail, Lock } from 'lucide-react';
 
@@ -36,8 +37,9 @@ const LoginPage: React.FC = () => {
 
             login(token, { id: userData._id, name: userData.name, email: userData.email });
             navigate('/dashboard', { replace: true });
-        } catch (err: any) {
-            setError(err.response?.data?.message || 'Failed to login. Please check your credentials.');
+        } catch (err) {
+            const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined;
+            setError(message || 'Failed to login. Please check your credentials.');
         } finally {
             setIsSubmitting(false);
         }

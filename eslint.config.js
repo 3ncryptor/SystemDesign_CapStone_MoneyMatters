@@ -10,6 +10,8 @@ export default [
       "**/dist/**",
       "**/coverage/**",
       "**/*.d.ts",
+      // Frontend has its own eslint.config.js — linted separately in CI
+      "frontend/**",
     ],
   },
 

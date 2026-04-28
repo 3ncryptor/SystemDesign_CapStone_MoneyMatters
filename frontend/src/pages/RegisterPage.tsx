@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Wallet, UserPlus, Mail, Lock, User } from 'lucide-react';
 
@@ -28,8 +29,9 @@ const RegisterPage: React.FC = () => {
         try {
             await api.post('/auth/register', { name, email, password });
             navigate('/login', { state: { message: 'Registration successful! Please log in.' } });
-        } catch (err: any) {
-            setError(err.response?.data?.message || 'Failed to register. Email might already be in use.');
+        } catch (err) {
+            const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined;
+            setError(message || 'Failed to register. Email might already be in use.');
         } finally {
             setIsSubmitting(false);
         }

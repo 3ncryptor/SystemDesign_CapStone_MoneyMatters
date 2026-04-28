@@ -5,6 +5,7 @@ import { Globe, Mail, MessageCircle, Share2 } from "lucide-react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
+import axios from 'axios';
 
 export default function AuthSwitch() {
   const location = useLocation();
@@ -58,8 +59,9 @@ export default function AuthSwitch() {
 
       login(token, { id: userData._id, name: userData.name, email: userData.email });
       navigate('/dashboard', { replace: true });
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to login. Please check your credentials.');
+    } catch (err) {
+      const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined;
+      setError(message || 'Failed to login. Please check your credentials.');
     } finally {
       setIsSubmitting(false);
     }
@@ -74,8 +76,9 @@ export default function AuthSwitch() {
       setIsSignUp(false);
       setError('');
       alert("Registration successful! Please log in.");
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to register. Email might already be in use.');
+    } catch (err) {
+      const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined;
+      setError(message || 'Failed to register. Email might already be in use.');
     } finally {
       setIsSubmitting(false);
     }

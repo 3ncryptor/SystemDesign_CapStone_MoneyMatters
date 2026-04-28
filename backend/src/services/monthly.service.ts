@@ -7,7 +7,7 @@ export class MonthlyService {
   constructor(
     private monthlyRepo: MonthlyPlanRepository,
     private transactionRepo: TransactionRepository,
-  ) { }
+  ) {}
 
   async setGoal(userId: string, month: number, year: number, goal: number) {
     const existing = await this.monthlyRepo.findByUserAndMonth(userId, month, year);

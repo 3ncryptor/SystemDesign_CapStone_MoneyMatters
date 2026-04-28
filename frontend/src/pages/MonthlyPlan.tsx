@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import axios from 'axios';
 import { Target, Calendar, CheckCircle2, AlertCircle, Lock } from 'lucide-react';
 
 interface MonthlyPlanData {
@@ -30,6 +31,7 @@ const MonthlyPlan: React.FC = () => {
     };
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchPlans();
     }, []);
 
@@ -56,8 +58,9 @@ const MonthlyPlan: React.FC = () => {
             setMessage({ type: 'success', text: 'Goal set successfully!' });
             setGoal('');
             fetchPlans();
-        } catch (err: any) {
-            setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to set goal.' });
+        } catch (err) {
+            const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined;
+            setMessage({ type: 'error', text: message || 'Failed to set goal.' });
         }
     };
 
@@ -67,8 +70,9 @@ const MonthlyPlan: React.FC = () => {
             await api.post('/monthly-plan/close');
             setMessage({ type: 'success', text: 'Month closed successfully!' });
             fetchPlans();
-        } catch (err: any) {
-            setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to close month.' });
+        } catch (err) {
+            const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined;
+            setMessage({ type: 'error', text: message || 'Failed to close month.' });
         }
     };
 

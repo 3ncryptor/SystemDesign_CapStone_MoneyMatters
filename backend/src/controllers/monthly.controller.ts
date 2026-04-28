@@ -41,13 +41,13 @@ export class MonthlyController {
     const parsedMonth = Number(month);
     const parsedYear = Number(year);
 
-    const closeMonth = Number.isInteger(parsedMonth) && parsedMonth >= 1 && parsedMonth <= 12
-      ? parsedMonth
-      : now.getMonth() + 1;
+    const closeMonth =
+      Number.isInteger(parsedMonth) && parsedMonth >= 1 && parsedMonth <= 12
+        ? parsedMonth
+        : now.getMonth() + 1;
 
-    const closeYear = Number.isInteger(parsedYear) && parsedYear > 0
-      ? parsedYear
-      : now.getFullYear();
+    const closeYear =
+      Number.isInteger(parsedYear) && parsedYear > 0 ? parsedYear : now.getFullYear();
 
     const data = await service.closeMonth(userId, closeMonth, closeYear);
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Search, Filter, Calendar, DollarSign, Tag, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
 
@@ -34,6 +35,7 @@ const Transactions: React.FC = () => {
     };
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchTransactions();
     }, []);
 
@@ -49,9 +51,9 @@ const Transactions: React.FC = () => {
             setShowModal(false);
             resetForm();
             fetchTransactions();
-        } catch (err: any) {
+        } catch (err) {
             console.error('Error adding transaction', err);
-            const message = err.response?.data?.message || 'Failed to add transaction. Please check your input.';
+            const message = axios.isAxiosError(err) ? (err.response?.data?.message ?? 'Failed to add transaction. Please check your input.') : 'Failed to add transaction. Please check your input.';
             alert(message);
         }
     };

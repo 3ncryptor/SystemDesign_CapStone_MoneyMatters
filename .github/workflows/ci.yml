@@ -3,7 +3,9 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  ci:
+  # ── Backend ────────────────────────────────────────────────────────────────
+  backend:
+    name: Backend — lint, format, test, build
     runs-on: ubuntu-latest
 
     steps:
@@ -12,6 +14,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            backend/package-lock.json
 
       - name: Install root deps
         run: npm install
@@ -20,12 +26,45 @@ jobs:
         run: npm install
         working-directory: backend
 
-      - name: Lint
+      # Root eslint.config.js covers backend/** — must run from repo root
+      - name: Lint (backend)
         run: npm run lint
 
-      - name: Format check
+      # Prettier is configured per-workspace in backend/
+      - name: Format check (backend)
         run: npm run format:check
+        working-directory: backend
 
-      - name: Build
+      - name: Test (backend)
+        run: npm run test
+        working-directory: backend
+
+      - name: Build (backend)
         run: npm run build
         working-directory: backend
+
+  # ── Frontend ───────────────────────────────────────────────────────────────
+  frontend:
+    name: Frontend — lint, type-check, build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend deps
+        run: npm install
+        working-directory: frontend
+
+      - name: Lint (frontend)
+        run: npm run lint
+        working-directory: frontend
+
+      - name: Build (frontend — includes tsc type-check + vite build)
+        run: npm run build
+        working-directory: frontend

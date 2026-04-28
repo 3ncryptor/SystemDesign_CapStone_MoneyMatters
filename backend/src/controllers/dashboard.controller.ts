@@ -15,13 +15,13 @@ export class DashboardController {
     const parsedMonth = Number(month);
     const parsedYear = Number(year);
 
-    const dashboardMonth = Number.isInteger(parsedMonth) && parsedMonth >= 1 && parsedMonth <= 12
-      ? parsedMonth
-      : now.getMonth() + 1;
+    const dashboardMonth =
+      Number.isInteger(parsedMonth) && parsedMonth >= 1 && parsedMonth <= 12
+        ? parsedMonth
+        : now.getMonth() + 1;
 
-    const dashboardYear = Number.isInteger(parsedYear) && parsedYear > 0
-      ? parsedYear
-      : now.getFullYear();
+    const dashboardYear =
+      Number.isInteger(parsedYear) && parsedYear > 0 ? parsedYear : now.getFullYear();
 
     const data = await service.getDashboard(userId, dashboardMonth, dashboardYear);
 
