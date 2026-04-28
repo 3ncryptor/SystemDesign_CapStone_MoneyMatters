@@ -10,9 +10,22 @@ import { errorMiddleware } from "./middlewares/error.middleware.js";
 
 const app = express();
 
+const defaultOrigins = ["http://localhost:5173", "http://localhost:5174", "http://localhost:3000"];
+
+// In production set CORS_ORIGIN to a comma-separated list of allowed origins,
+// e.g. CORS_ORIGIN=https://moneymatters.example.com
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(",").map((o) => o.trim())
+  : defaultOrigins;
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:3000"],
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      callback(new Error(`CORS: origin '${origin}' not allowed`));
+    },
     credentials: true,
   }),
 );
